@@ -4,18 +4,21 @@ import { $ } from "../utils/dom.js";
 import { filterList, sortList } from "../utils/listTools.js";
 import { exportToCSV, exportToPDF } from "../utils/exportTools.js";
 
-import { fetchAllProfiles } from "../services/profilesService.js";
 import { renderProfilesTable } from "../components/ProfilesTable.js";
 import { buildPrintableTableHTML } from "../utils/printTable.js";
+import { apiGetAll as apiGetAllPatients } from "../services/patientService.js";
+import { apiGetAll as apiGetAllInvoices } from "../services/billingService.js";
+import { apiGetAll as apiGetAllDoctors } from "../services/doctorService.js";
 
 const COLUMNS = [
   { key: "id", label: "ID" },
-  { key: "name", label: "Name" },
+  { key: "patient_name", label: "Patient" },
   { key: "email", label: "Email" },
-  { key: "year", label: "Year" },
+  { key: "phone", label: "Phone" },
+  { key: "doctor_name", label: "Doctor" },
 ];
 
-let allStudents = [];
+let allRows = [];
 
 export function initProfilesController() {
   loadProfiles();
@@ -25,13 +28,13 @@ export function initProfilesController() {
   $("sortDir")?.addEventListener("change", refresh);
 
   $("exportCsvBtn")?.addEventListener("click", () => {
-    exportToCSV("students.csv", getRows(), COLUMNS);
+    exportToCSV("clinic_report.csv", getRows(), COLUMNS);
   });
 
   $("exportPdfBtn")?.addEventListener("click", () => {
     const rows = getRows();
-    const html = buildPrintableTableHTML("Student Directory", rows, COLUMNS);
-    exportToPDF("Student Directory", html);
+    const html = buildPrintableTableHTML("Clinic Report", rows, COLUMNS);
+    exportToPDF("Clinic Report", html);
   });
 }
 
@@ -42,7 +45,26 @@ async function loadProfiles() {
   if (spinner) spinner.style.display = "block";
   if (container) container.style.display = "none";
 
-  allStudents = await fetchAllProfiles();
+  const [patients, invoices, doctors] = await Promise.all([
+    apiGetAllPatients(),
+    apiGetAllInvoices(),
+    apiGetAllDoctors(),
+  ]);
+
+  const invByPatient = new Map();
+  (invoices || []).slice().sort((a,b)=>b.id - a.id).forEach(inv => {
+    if (!invByPatient.has(inv.patient_id)) invByPatient.set(inv.patient_id, inv);
+  });
+
+  const doctorMap = new Map((doctors||[]).map(d => [d.id, d.name]));
+
+  allRows = (patients || []).map(p => ({
+    id: p.id,
+    patient_name: `${p.first_name} ${p.last_name}`,
+    email: p.email || "",
+    phone: p.phone || "",
+    doctor_name: (invByPatient.get(p.id) && invByPatient.get(p.id).doctor_name) || "",
+  }));
 
   refresh();
 
@@ -55,7 +77,7 @@ function getRows() {
   const sortKey = $("sortBy")?.value ?? "id";
   const sortDir = $("sortDir")?.value ?? "asc";
 
-  const filtered = filterList(allStudents, q, ["id", "name", "email", "year"]);
+  const filtered = filterList(allRows, q, ["id", "patient_name", "email", "phone", "doctor_name"]);
   return sortList(filtered, sortKey, sortDir);
 }
 

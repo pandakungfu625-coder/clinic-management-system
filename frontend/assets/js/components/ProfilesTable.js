@@ -30,7 +30,8 @@ export function renderProfilesTable(students) {
       </td>
 
       <td class="px-3 py-2">${s.email}</td>
-      <td class="px-3 py-2">${s.year}</td>
+      <td class="px-3 py-2">${s.phone || ""}</td>
+      <td class="px-3 py-2">${s.doctor_name || ""}</td>
 
       <td class="px-3 py-2">
         <a href="/profiles/${s.id}" data-link

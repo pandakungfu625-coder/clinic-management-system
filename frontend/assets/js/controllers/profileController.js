@@ -3,47 +3,125 @@
 import { $ } from "../utils/dom.js";
 import { exportToCSV, exportToPDF } from "../utils/exportTools.js";
 
+import { $ } from "../utils/dom.js";
+import { exportToCSV, exportToPDF } from "../utils/exportTools.js";
+
 import { fetchStudentById, fetchEnrollmentsForStudent } from "../services/profileService.js";
+import { apiGetOne as apiGetPatient } from "../services/patientService.js";
+import { apiGetAll as apiGetAllInvoices } from "../services/billingService.js";
+import { apiGetAll as apiGetAllDoctors } from "../services/doctorService.js";
+
 import {
   setProfileLoading,
   renderStudentBasic,
   renderEnrollmentCount,
   renderEnrollmentsTable,
   renderProfileError,
+  renderPatientBasic,
+  renderBillCount,
+  renderBillsTable,
+  renderPatientDoctors,
 } from "../components/ProfileView.js";
+import { buildPrintableTableHTML } from "../utils/printTable.js";
 
-import {
-  PROFILE_CSV_COLUMNS,
-  normalizeProfileRows,
-  buildProfilePDFHtml,
-} from "../utils/profileExport.js";
-
-export async function initProfileController(studentId) {
+export async function initProfileController(id) {
   setProfileLoading(true);
 
   try {
-    // Fetch data (service)
+    // Try patient first (clinic flow)
+    const patient = await apiGetPatient(id);
+
+    if (patient) {
+      // Clinic profile: fetch invoices and doctors
+      const [invoices, doctors] = await Promise.all([apiGetAllInvoices(), apiGetAllDoctors()]);
+      const bills = (invoices || []).filter((inv) => inv.patient_id === patient.id).sort((a,b)=>b.id - a.id);
+      const docMap = new Map((doctors||[]).map(d => [d.id, d.name]));
+      // also map specialty under key 'id__spec'
+      doctors?.forEach(d => docMap.set(d.id + "__spec", d.specialty || ""));
+
+      // Render UI
+      renderPatientBasic(patient);
+      renderBillCount(bills.length);
+      renderBillsTable(bills, docMap);
+
+      // Render assigned doctors (unique from bills)
+      const uniqueDoctors = [];
+      const seen = new Set();
+      bills.forEach(b => {
+        if (b.doctor_id && !seen.has(b.doctor_id)) {
+          seen.add(b.doctor_id);
+          const name = b.doctor_name || docMap.get(b.doctor_id);
+          const spec = doctors.find(d=>d.id===b.doctor_id)?.specialty || '';
+          uniqueDoctors.push({ name, specialty: spec });
+        }
+      });
+      // expose render for doctors (component)
+      if (typeof renderPatientDoctors === 'function') renderPatientDoctors(uniqueDoctors);
+
+      // exports
+      $("profileExportCsvBtn")?.addEventListener("click", () => {
+        exportToCSV(`patient_${patient.id}_bills.csv`, bills, [
+          {key: 'id', label: 'Invoice ID'},
+          {key: 'doctor_name', label: 'Doctor'},
+          {key: 'amount', label: 'Amount'},
+          {key: 'issued_on', label: 'Issued On'},
+          {key: 'description', label: 'Description'},
+        ]);
+      });
+
+      $("profileExportPdfBtn")?.addEventListener("click", () => {
+        const html = buildPrintableTableHTML(`Patient ${patient.id} Bills`, bills, [
+          {key: 'id', label: 'Invoice ID'},
+          {key: 'doctor_name', label: 'Doctor'},
+          {key: 'amount', label: 'Amount'},
+          {key: 'issued_on', label: 'Issued On'},
+          {key: 'description', label: 'Description'},
+        ]);
+        exportToPDF(`Patient ${patient.id} Bills`, html);
+      });
+
+      setProfileLoading(false);
+      return;
+    }
+
+    // Fallback: student profile (previous behavior)
     const [student, rows] = await Promise.all([
-      fetchStudentById(studentId),
-      fetchEnrollmentsForStudent(studentId),
+      fetchStudentById(id),
+      fetchEnrollmentsForStudent(id),
     ]);
 
-    if (!student) throw new Error("Student not found");
+    if (!student) throw new Error("Resource not found");
 
-    // Render UI (view)
     renderStudentBasic(student);
     renderEnrollmentCount(rows.length);
     renderEnrollmentsTable(rows);
 
     // Wire export buttons (controller)
     $("profileExportCsvBtn")?.addEventListener("click", () => {
-      const safeRows = normalizeProfileRows(rows);
-      const filename = `student_${student.id}_enrollments.csv`;
-      exportToCSV(filename, safeRows, PROFILE_CSV_COLUMNS);
+      // use existing profile export util if needed
+      // keep simple CSV using exportToCSV
+      exportToCSV(`student_${student.id}_enrollments.csv`, rows, [
+        { key: 'enrollment_id', label: 'Enroll ID' },
+        { key: 'course_title', label: 'Course' },
+        { key: 'course_code', label: 'Code' },
+        { key: 'teacher_name', label: 'Teacher' },
+        { key: 'fees', label: 'Fees' },
+        { key: 'duration_weeks', label: 'Weeks' },
+        { key: 'enrolled_on', label: 'Enrolled On' },
+      ]);
     });
 
     $("profileExportPdfBtn")?.addEventListener("click", () => {
-      const html = buildProfilePDFHtml(student, rows);
+      // build simple printable HTML
+      const html = buildPrintableTableHTML(`Student ${student.id} Enrollments`, rows, [
+        { key: 'enrollment_id', label: 'Enroll ID' },
+        { key: 'course_title', label: 'Course' },
+        { key: 'course_code', label: 'Code' },
+        { key: 'teacher_name', label: 'Teacher' },
+        { key: 'fees', label: 'Fees' },
+        { key: 'duration_weeks', label: 'Weeks' },
+        { key: 'enrolled_on', label: 'Enrolled On' },
+      ]);
       exportToPDF(`Student ${student.id} Profile`, html);
     });
 
