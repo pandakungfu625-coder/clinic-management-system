@@ -1,0 +1,430 @@
+<div class="w-full bg-gray-100 min-h-screen">
+  <div class="max-w-7xl mx-auto px-6 py-10">
+
+    <!-- Header -->
+    <div class="flex items-start justify-between gap-6 flex-wrap">
+      <div>
+        <h1 class="text-4xl font-bold text-gray-900">System Flow Diagrams</h1>
+        <p class="text-gray-600 mt-2 max-w-3xl">
+          Two interview-friendly flows:
+          <span class="font-semibold">Deployment (SRE view)</span> and a
+          <span class="font-semibold">Full-Stack Request Lifecycle</span> (end-to-end).
+        </p>
+      </div>
+
+      <a href="/home" data-link
+        class="inline-flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow transition text-blue-600">
+        <i class="fa-solid fa-arrow-left"></i>
+        Back to Home
+      </a>
+    </div>
+
+    <!-- ========================= -->
+    <!-- 1) SRE VIEW (existing idea) -->
+    <!-- ========================= -->
+    <div class="mt-10 bg-white rounded-2xl shadow border border-gray-200 p-6">
+      <div class="flex items-start justify-between gap-6 flex-wrap">
+        <div>
+          <h2 class="text-2xl font-bold text-gray-900">
+            1) Deployment Flow (SRE View)
+          </h2>
+          <p class="text-gray-600 mt-1">
+            How your code becomes a public HTTPS website: pipeline + networking + DNS + TLS.
+          </p>
+        </div>
+
+        <span class="px-3 py-1 rounded-full text-sm font-semibold bg-indigo-50 text-indigo-700 border border-indigo-100">
+          Pipeline + Networking
+        </span>
+      </div>
+
+      <!-- Simple overview row (easy to teach) -->
+      <div class="mt-6 grid grid-cols-1 md:grid-cols-5 gap-4 items-stretch">
+        <div class="p-4 rounded-xl border bg-gray-50">
+          <div class="flex items-center gap-2 font-semibold">
+            <i class="fa-brands fa-github text-lg"></i> GitHub Repo
+          </div>
+          <p class="text-sm text-gray-600 mt-2">
+            Commit + push → code becomes the “source of truth”.
+          </p>
+        </div>
+
+        <div class="p-4 rounded-xl border bg-gray-50">
+          <div class="flex items-center gap-2 font-semibold">
+            <i class="fa-solid fa-robot text-lg"></i> Render Build
+          </div>
+          <p class="text-sm text-gray-600 mt-2">
+            Render pulls code, installs deps (if any), prepares runtime.
+          </p>
+        </div>
+
+        <div class="p-4 rounded-xl border bg-gray-50">
+          <div class="flex items-center gap-2 font-semibold">
+            <i class="fa-solid fa-play text-lg"></i> Start Command
+          </div>
+          <p class="text-sm text-gray-600 mt-2">
+            Runs your server (e.g., <code class="bg-white px-1 rounded">python app.py</code>)
+            and binds to a PORT.
+          </p>
+        </div>
+
+        <div class="p-4 rounded-xl border bg-gray-50">
+          <div class="flex items-center gap-2 font-semibold">
+            <i class="fa-solid fa-route text-lg"></i> Public Routing
+          </div>
+          <p class="text-sm text-gray-600 mt-2">
+            Render routes internet traffic to your running service.
+          </p>
+        </div>
+
+        <div class="p-4 rounded-xl border bg-gray-50">
+          <div class="flex items-center gap-2 font-semibold">
+            <i class="fa-solid fa-lock text-lg"></i> HTTPS (TLS)
+          </div>
+          <p class="text-sm text-gray-600 mt-2">
+            TLS certificates + DNS make your app reachable securely.
+          </p>
+        </div>
+      </div>
+
+      <div class="mt-6 bg-gray-50 border rounded-xl p-4">
+        <ul class="list-disc pl-6 text-gray-700 space-y-2">
+          <li><span class="font-semibold">Load balancer</span>: the public entry point that receives requests and forwards them to your service.</li>
+          <li><span class="font-semibold">Public endpoint</span>: the URL Render gives you (and your custom domain can point to it).</li>
+          <li><span class="font-semibold">TLS/HTTPS</span>: encrypts traffic so data is secure between browser and Render.</li>
+          <li><span class="font-semibold">Routing</span>: decides which internal service gets the request (your web service).</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ========================================= -->
+    <!-- 2) FULL STACK FLOW (deep-dive, vertical)  -->
+    <!-- ========================================= -->
+    <div class="mt-10 bg-white rounded-2xl shadow border border-gray-200 p-6">
+      <div class="flex items-start justify-between gap-6 flex-wrap">
+        <div>
+          <h2 class="text-2xl font-bold text-gray-900">
+            2) Full-Stack Request Flow (Deep Dive)
+          </h2>
+          <p class="text-gray-600 mt-1 max-w-4xl">
+            A full “end-to-end” flow when a user opens the SPA and performs a CRUD action
+            (and also how JOIN report works).
+          </p>
+        </div>
+
+        <span class="px-3 py-1 rounded-full text-sm font-semibold bg-emerald-50 text-emerald-700 border border-emerald-100">
+          Browser → UI → API → DB → UI
+        </span>
+      </div>
+
+      <!-- Legend -->
+      <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="bg-gray-50 border rounded-xl p-4">
+          <div class="font-semibold flex items-center gap-2">
+            <i class="fa-solid fa-display"></i> Frontend (Browser)
+          </div>
+          <p class="text-sm text-gray-600 mt-1">
+            HTML/CSS/JS SPA: router, controllers, services, state, DOM rendering.
+          </p>
+        </div>
+        <div class="bg-gray-50 border rounded-xl p-4">
+          <div class="font-semibold flex items-center gap-2">
+            <i class="fa-solid fa-cloud-arrow-up"></i> Network / HTTP
+          </div>
+          <p class="text-sm text-gray-600 mt-1">
+            Requests, headers, JSON, status codes, CORS, port binding, URLs.
+          </p>
+        </div>
+        <div class="bg-gray-50 border rounded-xl p-4">
+          <div class="font-semibold flex items-center gap-2">
+            <i class="fa-solid fa-database"></i> Backend + Database
+          </div>
+          <p class="text-sm text-gray-600 mt-1">
+            router.py → controller → service → database/queries → SQLite.
+          </p>
+        </div>
+      </div>
+
+      <!-- Vertical Flow Timeline -->
+      <div class="mt-8 grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+        <!-- Left: Timeline -->
+        <div class="lg:col-span-8">
+          <div class="relative pl-6">
+            <!-- vertical line -->
+            <div class="absolute left-2 top-0 bottom-0 w-px bg-gray-200"></div>
+
+            <!-- Step 1 -->
+            <div class="relative mb-6">
+              <div class="absolute left-0 top-1 w-4 h-4 rounded-full bg-blue-600"></div>
+              <div class="bg-white border rounded-xl p-5 shadow-sm">
+                <div class="flex items-start justify-between gap-4">
+                  <div>
+                    <h3 class="font-bold text-lg">
+                      Step 1 — User action in Browser
+                    </h3>
+                    <p class="text-gray-600 text-sm mt-1">
+                      Example: user clicks <span class="font-semibold">Students</span>, submits a form, or opens the JOIN report page.
+                    </p>
+                  </div>
+                  <span class="text-xs font-semibold px-2 py-1 rounded bg-blue-50 text-blue-700 border border-blue-100">
+                    Browser
+                  </span>
+                </div>
+
+                <ul class="mt-3 text-sm text-gray-700 space-y-1 list-disc pl-5">
+                  <li>Click/submit triggers a JS event listener.</li>
+                  <li>URL changes (SPA navigation) using <code class="bg-gray-50 px-1 rounded">history.pushState</code>.</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Step 2 -->
+            <div class="relative mb-6">
+              <div class="absolute left-0 top-1 w-4 h-4 rounded-full bg-blue-600"></div>
+              <div class="bg-white border rounded-xl p-5 shadow-sm">
+                <div class="flex items-start justify-between gap-4">
+                  <div>
+                    <h3 class="font-bold text-lg">
+                      Step 2 — Frontend Router loads the view (SPA)
+                    </h3>
+                    <p class="text-gray-600 text-sm mt-1">
+                      <span class="font-semibold">viewRouter.js</span> decides what HTML page to load into <code class="bg-gray-50 px-1 rounded">#app</code>.
+                    </p>
+                  </div>
+                  <span class="text-xs font-semibold px-2 py-1 rounded bg-blue-50 text-blue-700 border border-blue-100">
+                    UI Router
+                  </span>
+                </div>
+
+                <ul class="mt-3 text-sm text-gray-700 space-y-1 list-disc pl-5">
+                  <li>Loads HTML using <code class="bg-gray-50 px-1 rounded">fetch("/frontend/pages/xxx.html")</code>.</li>
+                  <li>Injects HTML into DOM (no full page refresh).</li>
+                  <li>Then calls the matching controller init function (e.g., <code class="bg-gray-50 px-1 rounded">initStudentController()</code>).</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Step 3 -->
+            <div class="relative mb-6">
+              <div class="absolute left-0 top-1 w-4 h-4 rounded-full bg-purple-600"></div>
+              <div class="bg-white border rounded-xl p-5 shadow-sm">
+                <div class="flex items-start justify-between gap-4">
+                  <div>
+                    <h3 class="font-bold text-lg">
+                      Step 3 — Frontend Controller orchestrates UI logic
+                    </h3>
+                    <p class="text-gray-600 text-sm mt-1">
+                      Controller attaches event listeners, reads inputs, calls service, updates UI.
+                    </p>
+                  </div>
+                  <span class="text-xs font-semibold px-2 py-1 rounded bg-purple-50 text-purple-700 border border-purple-100">
+                    UI Controller
+                  </span>
+                </div>
+
+                <ul class="mt-3 text-sm text-gray-700 space-y-1 list-disc pl-5">
+                  <li>Reads form values via DOM (<code class="bg-gray-50 px-1 rounded">document.getElementById(...)</code> or your <code class="bg-gray-50 px-1 rounded">$</code> helper).</li>
+                  <li>Updates state (<span class="font-semibold">store.js</span>) like <code class="bg-gray-50 px-1 rounded">editingId</code>, cached lists, etc.</li>
+                  <li>Calls a frontend service function that talks to the API.</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Step 4 -->
+            <div class="relative mb-6">
+              <div class="absolute left-0 top-1 w-4 h-4 rounded-full bg-purple-600"></div>
+              <div class="bg-white border rounded-xl p-5 shadow-sm">
+                <div class="flex items-start justify-between gap-4">
+                  <div>
+                    <h3 class="font-bold text-lg">
+                      Step 4 — Frontend Service makes HTTP request (Fetch)
+                    </h3>
+                    <p class="text-gray-600 text-sm mt-1">
+                      Service builds the request: URL, method, headers, JSON body, and parses response.
+                    </p>
+                  </div>
+                  <span class="text-xs font-semibold px-2 py-1 rounded bg-purple-50 text-purple-700 border border-purple-100">
+                    UI Service
+                  </span>
+                </div>
+
+                <ul class="mt-3 text-sm text-gray-700 space-y-1 list-disc pl-5">
+                  <li>Uses <code class="bg-gray-50 px-1 rounded">fetch()</code> to call API endpoints like <code class="bg-gray-50 px-1 rounded">/api/students</code>.</li>
+                  <li>Sends JSON with <code class="bg-gray-50 px-1 rounded">Content-Type: application/json</code>.</li>
+                  <li>Receives status codes (200/201/404/500), parses JSON, returns it to controller.</li>
+                  <li><span class="font-semibold">CORS</span> matters when frontend and backend are on different origins (your backend adds CORS headers).</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Step 5 -->
+            <div class="relative mb-6">
+              <div class="absolute left-0 top-1 w-4 h-4 rounded-full bg-emerald-600"></div>
+              <div class="bg-white border rounded-xl p-5 shadow-sm">
+                <div class="flex items-start justify-between gap-4">
+                  <div>
+                    <h3 class="font-bold text-lg">
+                      Step 5 — Backend Router receives the request
+                    </h3>
+                    <p class="text-gray-600 text-sm mt-1">
+                      <span class="font-semibold">StudentRouter (BaseHTTPRequestHandler)</span> routes based on path + method.
+                    </p>
+                  </div>
+                  <span class="text-xs font-semibold px-2 py-1 rounded bg-emerald-50 text-emerald-700 border border-emerald-100">
+                    Backend Router
+                  </span>
+                </div>
+
+                <ul class="mt-3 text-sm text-gray-700 space-y-1 list-disc pl-5">
+                  <li>Checks UI routes first (serves SPA shell / static assets).</li>
+                  <li>Then API routes like <code class="bg-gray-50 px-1 rounded">GET /api/students</code>, <code class="bg-gray-50 px-1 rounded">POST /api/enrollments</code>.</li>
+                  <li>Handles preflight <code class="bg-gray-50 px-1 rounded">OPTIONS</code> for CORS.</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Step 6 -->
+            <div class="relative mb-6">
+              <div class="absolute left-0 top-1 w-4 h-4 rounded-full bg-emerald-600"></div>
+              <div class="bg-white border rounded-xl p-5 shadow-sm">
+                <div class="flex items-start justify-between gap-4">
+                  <div>
+                    <h3 class="font-bold text-lg">
+                      Step 6 — Backend Controller handles HTTP details
+                    </h3>
+                    <p class="text-gray-600 text-sm mt-1">
+                      Controller parses JSON body, calls service, returns JSON + status.
+                    </p>
+                  </div>
+                  <span class="text-xs font-semibold px-2 py-1 rounded bg-emerald-50 text-emerald-700 border border-emerald-100">
+                    Backend Controller
+                  </span>
+                </div>
+
+                <ul class="mt-3 text-sm text-gray-700 space-y-1 list-disc pl-5">
+                  <li>Reads request body (<code class="bg-gray-50 px-1 rounded">parse_json_body</code>).</li>
+                  <li>Calls service functions (business rules layer).</li>
+                  <li>Writes response with headers + JSON (<code class="bg-gray-50 px-1 rounded">send_json</code>).</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Step 7 -->
+            <div class="relative mb-6">
+              <div class="absolute left-0 top-1 w-4 h-4 rounded-full bg-amber-600"></div>
+              <div class="bg-white border rounded-xl p-5 shadow-sm">
+                <div class="flex items-start justify-between gap-4">
+                  <div>
+                    <h3 class="font-bold text-lg">
+                      Step 7 — Backend Service applies business logic
+                    </h3>
+                    <p class="text-gray-600 text-sm mt-1">
+                      Service layer is “pure Python data” logic: validation, mapping, rules.
+                    </p>
+                  </div>
+                  <span class="text-xs font-semibold px-2 py-1 rounded bg-amber-50 text-amber-700 border border-amber-100">
+                    Backend Service
+                  </span>
+                </div>
+
+                <ul class="mt-3 text-sm text-gray-700 space-y-1 list-disc pl-5">
+                  <li>Calls database query functions.</li>
+                  <li>Good place for validation (e.g., required fields, types, constraints).</li>
+                  <li>Keeps controller clean and consistent.</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Step 8 -->
+            <div class="relative mb-6">
+              <div class="absolute left-0 top-1 w-4 h-4 rounded-full bg-amber-600"></div>
+              <div class="bg-white border rounded-xl p-5 shadow-sm">
+                <div class="flex items-start justify-between gap-4">
+                  <div>
+                    <h3 class="font-bold text-lg">
+                      Step 8 — Database Query executes SQL (CRUD / JOIN)
+                    </h3>
+                    <p class="text-gray-600 text-sm mt-1">
+                      Queries live in <span class="font-semibold">database/queries.py</span> and run raw SQL against SQLite.
+                    </p>
+                  </div>
+                  <span class="text-xs font-semibold px-2 py-1 rounded bg-amber-50 text-amber-700 border border-amber-100">
+                    SQL Layer
+                  </span>
+                </div>
+
+                <ul class="mt-3 text-sm text-gray-700 space-y-1 list-disc pl-5">
+                  <li><span class="font-semibold">CRUD</span>: SELECT, INSERT, UPDATE, DELETE.</li>
+                  <li><span class="font-semibold">JOIN report</span>: combines <code class="bg-gray-50 px-1 rounded">students</code>, <code class="bg-gray-50 px-1 rounded">courses</code>, <code class="bg-gray-50 px-1 rounded">enrollments</code>.</li>
+                  <li>Uses placeholders (<code class="bg-gray-50 px-1 rounded">?</code>) to avoid SQL injection.</li>
+                  <li>Commits writes and closes connections.</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Step 9 -->
+            <div class="relative mb-6">
+              <div class="absolute left-0 top-1 w-4 h-4 rounded-full bg-gray-900"></div>
+              <div class="bg-white border rounded-xl p-5 shadow-sm">
+                <div class="flex items-start justify-between gap-4">
+                  <div>
+                    <h3 class="font-bold text-lg">
+                      Step 9 — Response travels back (DB → API → UI)
+                    </h3>
+                    <p class="text-gray-600 text-sm mt-1">
+                      JSON response returns to browser, controller updates UI (table render, alerts, state).
+                    </p>
+                  </div>
+                  <span class="text-xs font-semibold px-2 py-1 rounded bg-gray-100 text-gray-800 border border-gray-200">
+                    Return Path
+                  </span>
+                </div>
+
+                <ul class="mt-3 text-sm text-gray-700 space-y-1 list-disc pl-5">
+                  <li>Backend returns status code + JSON body.</li>
+                  <li>Frontend service parses JSON.</li>
+                  <li>Frontend controller updates state + rerenders DOM components (tables/forms).</li>
+                  <li>UI shows success/failure via alerts and loading spinners.</li>
+                </ul>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Right: Quick cheat sheet -->
+        <div class="lg:col-span-4">
+          <div class="sticky top-6 space-y-4">
+
+            <div class="bg-gray-50 border rounded-2xl p-5">
+              <h3 class="font-bold text-lg flex items-center gap-2">
+                <i class="fa-solid fa-list-check"></i>
+                Concepts covered in this flow
+              </h3>
+
+              <ul class="mt-3 text-sm text-gray-700 space-y-2 list-disc pl-5">
+                <li>SPA navigation (router + pushState)</li>
+                <li>DOM rendering + dynamic HTML injection</li>
+                <li>Controller vs service separation (frontend)</li>
+                <li>Fetch API, JSON, headers, methods</li>
+                <li>Status codes + error handling</li>
+                <li>CORS + OPTIONS preflight</li>
+                <li>Backend routing by method + path</li>
+                <li>Controller (HTTP) vs service (business logic)</li>
+                <li>SQL CRUD and parameterized queries</li>
+                <li>JOIN across multiple tables</li>
+                <li>State store + UI re-render cycle</li>
+              </ul>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Footer spacing -->
+    <div class="h-10"></div>
+  </div>
+</div>

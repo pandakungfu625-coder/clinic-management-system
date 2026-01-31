@@ -1,0 +1,83 @@
+<div class="max-w-5xl mx-auto p-8">
+
+  <!-- Hero -->
+  <div class="bg-white border rounded-xl shadow-sm p-8">
+    <div class="flex items-center gap-3 mb-4">
+      <div class="h-10 w-10 rounded-lg bg-blue-600 text-white flex items-center justify-center">
+        <i class="fa-solid fa-graduation-cap"></i>
+      </div>
+      <div>
+        <h1 class="text-3xl font-bold text-gray-900">Student Management System</h1>
+        <p class="text-sm text-gray-600">Full-stack mini project (Students • Courses • Enrollments • Profiles)</p>
+      </div>
+    </div>
+
+    <p class="text-gray-700 leading-relaxed">
+      This project demonstrates how a real web app works end-to-end: a frontend UI talking to a backend API,
+      and data stored in a relational database. It covers CRUD, relationships, and JOIN outputs in a simple,
+      explainable way.
+    </p>
+
+    <!-- small meta -->
+    <div class="mt-6 flex flex-wrap gap-2 text-xs">
+      <span class="px-3 py-1 rounded-full bg-gray-100 text-gray-700 border">Frontend: HTML + Tailwind + JS</span>
+      <span class="px-3 py-1 rounded-full bg-gray-100 text-gray-700 border">Backend: Python HTTP Server</span>
+      <span class="px-3 py-1 rounded-full bg-gray-100 text-gray-700 border">Database: SQLite</span>
+      <span class="px-3 py-1 rounded-full bg-gray-100 text-gray-700 border">Concepts: CRUD + JOIN</span>
+    </div>
+
+    <!-- one subtle CTA (not button grid) -->
+    <div class="mt-8 flex flex-col sm:flex-row sm:items-center gap-3">
+      <a href="/profiles" data-link
+        class="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-md bg-blue-600 text-white text-sm hover:bg-blue-700">
+        <i class="fa-solid fa-arrow-right"></i>
+        Get Started (Student Directory)
+      </a>
+
+      <a href="/docs/flow" data-link
+        class="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-md border text-sm text-gray-700 bg-white hover:bg-gray-50">
+        <i class="fa-solid fa-diagram-project text-gray-600"></i>
+        View Flow Diagram
+      </a>
+    </div>
+  </div>
+
+  <!-- What this includes -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+
+    <div class="bg-white border rounded-xl p-6 shadow-sm">
+      <div class="flex items-center gap-2 mb-2">
+        <i class="fa-solid fa-users text-blue-600"></i>
+        <h2 class="font-semibold text-gray-900">Students</h2>
+      </div>
+      <p class="text-sm text-gray-600 leading-relaxed">
+        Create, update and manage student records. Then open their profile to view all details.
+      </p>
+      <p class="text-xs text-gray-500 mt-3">CRUD operations</p>
+    </div>
+
+    <div class="bg-white border rounded-xl p-6 shadow-sm">
+      <div class="flex items-center gap-2 mb-2">
+        <i class="fa-solid fa-book text-green-600"></i>
+        <h2 class="font-semibold text-gray-900">Courses</h2>
+      </div>
+      <p class="text-sm text-gray-600 leading-relaxed">
+        Create courses with teacher, fees and duration. Used later inside enrollments and profiles.
+      </p>
+      <p class="text-xs text-gray-500 mt-3">Structured data</p>
+    </div>
+
+    <div class="bg-white border rounded-xl p-6 shadow-sm">
+      <div class="flex items-center gap-2 mb-2">
+        <i class="fa-solid fa-link text-purple-600"></i>
+        <h2 class="font-semibold text-gray-900">Enrollments</h2>
+      </div>
+      <p class="text-sm text-gray-600 leading-relaxed">
+        Connect students and courses (many-to-many). Profiles show this cleanly using JOIN output.
+      </p>
+      <p class="text-xs text-gray-500 mt-3">Relationships + JOIN</p>
+    </div>
+
+  </div>
+
+</div>
