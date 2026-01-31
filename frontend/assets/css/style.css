@@ -79,8 +79,29 @@ body::before {
 }
 .hero p { color: rgba(0,0,0,0.75); }
 
-/* Slightly translucent header & footer to blend with background */
+/* Header & footer use brand purple */
 header, footer {
-  background: rgba(255,255,255,0.92);
+  background: #B19CD9;
   backdrop-filter: blur(2px);
+}
+
+/* Header text & icons: white for contrast */
+header {
+  color: #fff;
+}
+
+/* Ensure header links and icons are readable */
+header a,
+header .nav-link,
+header i,
+header svg,
+header svg * {
+  color: #fff !important;
+  fill: #fff !important;
+  stroke: #fff !important;
+}
+
+/* Footer keeps white text for readability */
+footer {
+  color: #fff;
 }
