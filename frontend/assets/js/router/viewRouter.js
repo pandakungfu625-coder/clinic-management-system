@@ -87,12 +87,21 @@ export async function router() {
   }
 
   // --------------------
-  // APPOINTMENTS (CRUD)
+  // BILLING (CRUD)
   // --------------------
+  if (path === "/billing") {
+    await loadView("/frontend/pages/billing.html");
+    const mod = await import("../controllers/billingController.js");
+    mod.initBillingController();
+    return;
+  }
+
+  // Redirect old appointments route to billing
   if (path === "/appointments") {
-    await loadView("/frontend/pages/appointments.html");
-    const mod = await import("../controllers/appointmentController.js");
-    mod.initAppointmentController();
+    history.replaceState(null, "", "/billing");
+    await loadView("/frontend/pages/billing.html");
+    const mod = await import("../controllers/billingController.js");
+    mod.initBillingController();
     return;
   }
 
