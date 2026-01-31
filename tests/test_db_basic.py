@@ -19,19 +19,19 @@ import os
 
 class TestDatabaseBasics(unittest.TestCase):
 
-    def test_students_db_exists(self):
+    def test_clinic_db_exists(self):
         """
-        Check that the database file is present in the project.
+        Check that the clinic database file is present in the project.
 
         If the file is missing:
         - the app cannot work
         - the test should fail immediately
         """
 
-        # Check: does 'students.db' file exist?
+        # Check: does 'clinic.db' file exist?
         self.assertTrue(
-            os.path.exists("students.db"),
-            "students.db file is missing"
+            os.path.exists("clinic.db"),
+            "clinic.db file is missing"
         )
 
     def test_can_connect_and_list_tables(self):
@@ -62,8 +62,8 @@ class TestDatabaseBasics(unittest.TestCase):
             "No tables found in the database"
         )
 
-        # Check: expected table should exist
+        # Check: expected table should exist (patients table)
         self.assertIn(
-            "students",
+            "patients",
             tables
         )
