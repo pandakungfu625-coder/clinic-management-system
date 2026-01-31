@@ -94,6 +94,21 @@ def init_database():
         )
     """)
 
+    conn.execute("""
+        CREATE TABLE IF NOT EXISTS invoices (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            patient_id INTEGER NOT NULL,
+            doctor_id INTEGER,
+            amount REAL NOT NULL,
+            issued_on TEXT,
+            description TEXT,
+            created_at TEXT,
+            updated_at TEXT,
+            FOREIGN KEY(patient_id) REFERENCES patients(id),
+            FOREIGN KEY(doctor_id) REFERENCES doctors(id)
+        )
+    """)
+
     conn.commit()
     conn.close()
     print("✓ Database initialized")

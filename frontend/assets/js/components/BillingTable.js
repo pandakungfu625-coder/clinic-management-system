@@ -21,10 +21,9 @@ export function renderBillingTable(invoices) {
     row.innerHTML = `
       <td class="px-3 py-2">${a.id}</td>
       <td class="px-3 py-2 font-medium text-gray-900">${a.patient_name || a.patient_id}</td>
-      <td class="px-3 py-2">${a.amount}</td>
+      <td class="px-3 py-2">${a.doctor_name || a.doctor_id || ""}</td>
       <td class="px-3 py-2">${a.issued_on || ""}</td>
-      <td class="px-3 py-2">${a.paid_on || ""}</td>
-      <td class="px-3 py-2">${a.status || ""}</td>
+      <td class="px-3 py-2">${a.amount}</td>
       <td class="px-3 py-2 flex space-x-2">
         <button class="bg-yellow-400 hover:bg-yellow-500 text-black py-1 px-3 rounded" data-edit="${a.id}">Edit</button>
         <button class="bg-red-500 hover:bg-red-600 text-white py-1 px-3 rounded" data-delete="${a.id}">Delete</button>

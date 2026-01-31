@@ -1,5 +1,6 @@
 import { apiGetAll, apiGetOne, apiCreate, apiUpdate, apiDelete } from "../services/billingService.js";
 import { apiGetAll as apiGetAllPatients } from "../services/patientService.js";
+import { apiGetAll as apiGetAllDoctors } from "../services/doctorService.js";
 import { showAlert } from "../components/Alert.js";
 import { renderBillingTable } from "../components/BillingTable.js";
 import { resetForm, fillForm, populateSelects } from "../components/BillingForm.js";
@@ -15,11 +16,10 @@ export async function initBillingController() {
 
     const data = {
       patient_id: Number($("patient_id").value),
+      doctor_id: Number($("doctor_id").value),
       amount: Number($("amount").value),
       issued_on: $("issued_on").value || null,
-      paid_on: $("paid_on").value || null,
       description: $("description").value.trim(),
-      status: $("paid_on").value ? "paid" : "unpaid",
     };
 
     const { editingId } = getState();
@@ -39,8 +39,20 @@ export async function loadInvoices() {
   table.style.display = "none";
 
   const invoices = await apiGetAll();
-  setState({ invoices });
-  renderBillingTable(invoices);
+
+  // load patients & doctors to show names in the table
+  const [patients, doctors] = await Promise.all([apiGetAllPatients(), apiGetAllDoctors()]);
+  const pMap = new Map((patients || []).map((p) => [p.id, `${p.first_name} ${p.last_name}`]));
+  const dMap = new Map((doctors || []).map((d) => [d.id, `${d.first_name} ${d.last_name}`]));
+
+  const decorated = (invoices || []).map((inv) => ({
+    ...inv,
+    patient_name: inv.patient_name || pMap.get(inv.patient_id),
+    doctor_name: inv.doctor_name || dMap.get(inv.doctor_id),
+  }));
+
+  setState({ invoices: decorated });
+  renderBillingTable(decorated);
 
   spinner.style.display = "none";
   table.style.display = "block";

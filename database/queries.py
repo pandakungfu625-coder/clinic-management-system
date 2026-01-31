@@ -434,6 +434,82 @@ def appointments_delete(appointment_id: int):
 
 
 # -----------------------------
+# INVOICES CRUD
+# -----------------------------
+
+def invoices_get_all():
+    conn = get_connection()
+    rows = conn.execute("""
+        SELECT
+            i.*,
+            p.first_name || ' ' || p.last_name AS patient_name,
+            d.name AS doctor_name
+        FROM invoices i
+        LEFT JOIN patients p ON p.id = i.patient_id
+        LEFT JOIN doctors d ON d.id = i.doctor_id
+        ORDER BY i.id DESC
+    """).fetchall()
+    conn.close()
+    return [dict(r) for r in rows]
+
+
+def invoices_get_one(invoice_id: int):
+    conn = get_connection()
+    row = conn.execute("SELECT * FROM invoices WHERE id = ?", (invoice_id,)).fetchone()
+    conn.close()
+    return dict(row) if row else None
+
+
+def invoices_create(data: dict):
+    conn = get_connection()
+    now = datetime.now().isoformat()
+    cur = conn.execute(
+        "INSERT INTO invoices (patient_id, doctor_id, amount, issued_on, description, created_at) VALUES (?, ?, ?, ?, ?, ?)",
+        (data["patient_id"], data.get("doctor_id"), data["amount"], data.get("issued_on"), data.get("description"), now)
+    )
+    conn.commit()
+    new_id = cur.lastrowid
+    conn.close()
+    return invoices_get_one(new_id)
+
+
+def invoices_update(invoice_id: int, data: dict):
+    conn = get_connection()
+    now = datetime.now().isoformat()
+    conn.execute(
+        """
+        UPDATE invoices
+        SET patient_id=?, doctor_id=?, amount=?, issued_on=?, description=?, updated_at=?
+        WHERE id=?
+        """,
+        (
+            data.get("patient_id"),
+            data.get("doctor_id"),
+            data.get("amount"),
+            data.get("issued_on"),
+            data.get("description"),
+            now,
+            invoice_id,
+        ),
+    )
+    conn.commit()
+    conn.close()
+    return invoices_get_one(invoice_id)
+
+
+def invoices_delete(invoice_id: int):
+    inv = invoices_get_one(invoice_id)
+    if not inv:
+        return None
+
+    conn = get_connection()
+    conn.execute("DELETE FROM invoices WHERE id=?", (invoice_id,))
+    conn.commit()
+    conn.close()
+    return inv
+
+
+# -----------------------------
 # APPOINTMENT REPORT (JOIN)
 # -----------------------------
 

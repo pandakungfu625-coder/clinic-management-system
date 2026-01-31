@@ -54,6 +54,14 @@ from controllers.appointments import (
     delete_appointment,
 )
 
+from controllers.invoices import (
+    get_all_invoices,
+    get_invoice,
+    create_invoice,
+    update_invoice,
+    delete_invoice,
+)
+
 from core.static import serve_static
 from core.responses import send_404, send_json
 from core.middleware import add_cors_headers
@@ -230,6 +238,18 @@ class StudentRouter(BaseHTTPRequestHandler):
                 return
             return get_appointment(self, appointment_id)
 
+        # ---------------------------
+        # INVOICES
+        # ---------------------------
+        if path == "/api/invoices":
+            return get_all_invoices(self)
+
+        if path.startswith("/api/invoices/"):
+            invoice_id = _last_path_id_or_404(self, path)
+            if invoice_id is None:
+                return
+            return get_invoice(self, invoice_id)
+
         return send_404(self)
 
     # ---------------------------
@@ -267,6 +287,12 @@ class StudentRouter(BaseHTTPRequestHandler):
         # ---------------------------
         if path == "/api/appointments":
             return create_appointment(self)
+
+        # ---------------------------
+        # INVOICES
+        # ---------------------------
+        if path == "/api/invoices":
+            return create_invoice(self)
 
         return send_404(self)
 
@@ -316,6 +342,15 @@ class StudentRouter(BaseHTTPRequestHandler):
             if appointment_id is None:
                 return
             return update_appointment(self, appointment_id)
+
+        # ---------------------------
+        # INVOICES
+        # ---------------------------
+        if path.startswith("/api/invoices/"):
+            invoice_id = _last_path_id_or_404(self, path)
+            if invoice_id is None:
+                return
+            return update_invoice(self, invoice_id)
 
         return send_404(self)
 
@@ -372,6 +407,15 @@ class StudentRouter(BaseHTTPRequestHandler):
             if appointment_id is None:
                 return
             return delete_appointment(self, appointment_id)
+
+        # ---------------------------
+        # INVOICES
+        # ---------------------------
+        if path.startswith("/api/invoices/"):
+            invoice_id = _last_path_id_or_404(self, path)
+            if invoice_id is None:
+                return
+            return delete_invoice(self, invoice_id)
 
         return send_404(self)
 

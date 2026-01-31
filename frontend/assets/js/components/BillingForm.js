@@ -1,5 +1,6 @@
 import { $ } from "../utils/dom.js";
 import { apiGetAll as apiGetAllPatients } from "../services/patientService.js";
+import { apiGetAll as apiGetAllDoctors } from "../services/doctorService.js";
 
 export async function populateSelects() {
   const patients = await apiGetAllPatients();
@@ -11,19 +12,30 @@ export async function populateSelects() {
     opt.textContent = `${p.first_name} ${p.last_name}`;
     pSelect.appendChild(opt);
   });
+
+  const doctors = await apiGetAllDoctors();
+  const dSelect = $("doctor_id");
+  dSelect.innerHTML = "<option value=''>Select doctor</option>";
+  (doctors || []).forEach((d) => {
+    const opt = document.createElement("option");
+    opt.value = d.id;
+    opt.textContent = `${d.first_name} ${d.last_name}`;
+    dSelect.appendChild(opt);
+  });
 }
 
 export function resetForm() {
   $("billingForm").reset();
   $("submitBtn").textContent = "Create Invoice";
   $("cancelBtn").style.display = "none";
+  $("doctor_id").value = "";
 }
 
 export function fillForm(inv) {
   $("patient_id").value = inv.patient_id;
+  $("doctor_id").value = inv.doctor_id || "";
   $("amount").value = inv.amount;
   $("issued_on").value = inv.issued_on || "";
-  $("paid_on").value = inv.paid_on || "";
   $("description").value = inv.description || "";
 
   $("submitBtn").textContent = "Update Invoice";
