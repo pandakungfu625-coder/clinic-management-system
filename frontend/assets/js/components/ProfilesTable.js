@@ -44,7 +44,6 @@ export function renderProfilesTable(students) {
 
     // Add delete handler
     tr.querySelector('[data-delete]')?.addEventListener('click', async () => {
-      if (!confirm('Delete this patient?')) return;
       const res = await import('../services/patientService.js').then(m => m.apiDelete(s.id));
       if (res.ok) {
         tr.remove();
