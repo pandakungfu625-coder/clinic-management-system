@@ -33,14 +33,28 @@ export function renderProfilesTable(students) {
       <td class="px-3 py-2">${s.phone || ""}</td>
       <td class="px-3 py-2">${s.doctor_name || ""}</td>
 
-      <td class="px-3 py-2">
+      <td class="px-3 py-2 flex gap-2">
         <a href="/profiles/${s.id}" data-link
           class="inline-flex items-center justify-center px-3 py-1 rounded bg-blue-600 text-white hover:bg-blue-700">
           View
         </a>
+        <button class="inline-flex items-center justify-center px-3 py-1 rounded bg-red-600 text-white hover:bg-red-700" data-delete="${s.id}">Delete</button>
       </td>
     `;
 
+    // Add delete handler
+    tr.querySelector('[data-delete]')?.addEventListener('click', async () => {
+      if (!confirm('Delete this patient?')) return;
+      const res = await import('../services/patientService.js').then(m => m.apiDelete(s.id));
+      if (res.ok) {
+        tr.remove();
+        const alert = await import('../components/Alert.js');
+        alert.showAlert('Patient deleted!');
+      } else {
+        const alert = await import('../components/Alert.js');
+        alert.showAlert('Failed to delete patient', 'error');
+      }
+    });
     body.appendChild(tr);
   });
 }

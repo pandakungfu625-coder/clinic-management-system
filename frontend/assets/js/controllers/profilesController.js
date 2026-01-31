@@ -60,7 +60,7 @@ async function loadProfiles() {
 
   allRows = (patients || []).map(p => ({
     id: p.id,
-    patient_name: `${p.first_name} ${p.last_name}`,
+    name: `${p.first_name || ""} ${p.last_name || ""}`.trim(),
     email: p.email || "",
     phone: p.phone || "",
     doctor_name: (invByPatient.get(p.id) && invByPatient.get(p.id).doctor_name) || "",
