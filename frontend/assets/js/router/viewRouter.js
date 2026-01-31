@@ -36,35 +36,6 @@ export async function router() {
     return;
   }
 
-  // --------------------
-  // STUDENTS (CRUD)
-  // --------------------
-  if (path === "/students") {
-    await loadView("/frontend/pages/students.html");
-    const mod = await import("../controllers/studentController.js");
-    mod.initStudentController();
-    return;
-  }
-
-  // --------------------
-  // COURSES (CRUD)
-  // --------------------
-  if (path === "/courses") {
-    await loadView("/frontend/pages/courses.html");
-    const mod = await import("../controllers/courseController.js");
-    mod.initCourseController();
-    return;
-  }
-
-  // --------------------
-  // ENROLLMENTS (CRUD)
-  // --------------------
-  if (path === "/enrollments") {
-    await loadView("/frontend/pages/enrollments.html");
-    const mod = await import("../controllers/enrollmentController.js");
-    mod.initEnrollmentController();
-    return;
-  }
 
   // --------------------
   // PATIENTS (CRUD)
@@ -105,15 +76,6 @@ export async function router() {
     return;
   }
 
-  // --------------------
-  // REPORT (JOIN)
-  // --------------------
-  if (path === "/reports/enrollments") {
-    await loadView("/frontend/pages/report_enrollments.html");
-    const mod = await import("../controllers/reportController.js");
-    mod.initEnrollmentReportController();
-    return;
-  }
 
   // --------------------
   // DOCS FLOW

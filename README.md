@@ -1,6 +1,6 @@
 # Clinic Management System
 
-This repository is a converted student project adapted into a minimal **Clinic Management System**.
+This repository is a converted project adapted into a minimal **Clinic Management System**.
 
 Features added:
 - Patients (CRUD)
