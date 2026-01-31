@@ -42,7 +42,7 @@ class TestDatabaseBasics(unittest.TestCase):
         """
 
         # Open a connection to the SQLite database
-        conn = sqlite3.connect("students.db")
+        conn = sqlite3.connect("clinic.db")
 
         # Create a cursor to run SQL queries
         cur = conn.cursor()
