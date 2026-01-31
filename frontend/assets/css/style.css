@@ -4,6 +4,29 @@ body {
   scroll-behavior: smooth;
 }
 
+/* Color palette (custom brand colors) */
+:root {
+  --brand-1: #71CB90; /* primary green */
+  --brand-2: #B5E8A4; /* primary green (light) */
+  --brand-3: #FFC8C4; /* soft pink */
+  --brand-4: #FFB0C4; /* soft pink (mid) */
+  --brand-5: #FF97C4; /* accent / danger */
+}
+
+/* Utility classes using brand colors */
+.text-brand-1 { color: var(--brand-1) !important; }
+.bg-brand-1 { background: var(--brand-1) !important; color: #fff !important; }
+.hover\:bg-brand-2:hover { background: var(--brand-2) !important; }
+
+.btn-primary { background: var(--brand-1); color: #fff; }
+.btn-primary:hover { background: var(--brand-2); }
+
+.btn-danger { background: var(--brand-5); color: #fff; }
+.btn-danger:hover { background: var(--brand-4); }
+
+.nav-link { color: var(--brand-1); }
+.nav-link:hover { color: var(--brand-2); text-decoration: underline; }
+
 /* Optional: animate alert fade */
 #alertContainer > div {
   transition: all 0.3s ease;

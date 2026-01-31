@@ -35,10 +35,10 @@ export function renderProfilesTable(students) {
 
       <td class="px-3 py-2 flex gap-2">
         <a href="/profiles/${s.id}" data-link
-          class="inline-flex items-center justify-center px-3 py-1 rounded bg-blue-600 text-white hover:bg-blue-700">
+          class="inline-flex items-center justify-center px-3 py-1 rounded bg-brand-1 text-white hover:bg-brand-2">
           View
         </a>
-        <button class="inline-flex items-center justify-center px-3 py-1 rounded bg-red-600 text-white hover:bg-red-700" data-delete="${s.id}">Delete</button>
+        <button class="inline-flex items-center justify-center px-3 py-1 rounded btn-danger" data-delete="${s.id}">Delete</button>
       </td>
     `;
 

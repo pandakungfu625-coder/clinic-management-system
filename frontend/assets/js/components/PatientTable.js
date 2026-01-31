@@ -25,7 +25,7 @@ export function renderPatientTable(patients) {
       <td class="px-3 py-2">${p.email || ""}</td>
       <td class="px-3 py-2 flex space-x-2">
         <button class="bg-yellow-400 hover:bg-yellow-500 text-black py-1 px-3 rounded" data-edit="${p.id}">Edit</button>
-        <button class="bg-red-500 hover:bg-red-600 text-white py-1 px-3 rounded" data-delete="${p.id}">Delete</button>
+        <button class="btn-danger text-white py-1 px-3 rounded" data-delete="${p.id}">Delete</button>
       </td>
     `;
 

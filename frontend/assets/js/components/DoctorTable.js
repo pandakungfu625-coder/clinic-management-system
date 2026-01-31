@@ -25,7 +25,7 @@ export function renderDoctorTable(doctors) {
       <td class="px-3 py-2">${d.phone || ""}</td>
       <td class="px-3 py-2 flex space-x-2">
         <button class="bg-yellow-400 hover:bg-yellow-500 text-black py-1 px-3 rounded" data-edit="${d.id}">Edit</button>
-        <button class="bg-red-500 hover:bg-red-600 text-white py-1 px-3 rounded" data-delete="${d.id}">Delete</button>
+        <button class="btn-danger text-white py-1 px-3 rounded" data-delete="${d.id}">Delete</button>
       </td>
     `;
 
