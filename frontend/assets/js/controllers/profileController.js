@@ -3,9 +3,6 @@
 import { $ } from "../utils/dom.js";
 import { exportToCSV, exportToPDF } from "../utils/exportTools.js";
 
-import { $ } from "../utils/dom.js";
-import { exportToCSV, exportToPDF } from "../utils/exportTools.js";
-
 import { fetchStudentById, fetchEnrollmentsForStudent } from "../services/profileService.js";
 import { apiGetOne as apiGetPatient } from "../services/patientService.js";
 import { apiGetAll as apiGetAllInvoices } from "../services/billingService.js";
@@ -25,15 +22,19 @@ import {
 import { buildPrintableTableHTML } from "../utils/printTable.js";
 
 export async function initProfileController(id) {
+  console.debug("[profileController] init", id);
   setProfileLoading(true);
 
   try {
     // Try patient first (clinic flow)
     const patient = await apiGetPatient(id);
+    console.debug("[profileController] apiGetPatient ->", patient);
 
     if (patient) {
       // Clinic profile: fetch invoices and doctors
       const [invoices, doctors] = await Promise.all([apiGetAllInvoices(), apiGetAllDoctors()]);
+      console.debug("[profileController] invoices, doctors ->", invoices?.length, doctors?.length);
+
       const bills = (invoices || []).filter((inv) => inv.patient_id === patient.id).sort((a,b)=>b.id - a.id);
       const docMap = new Map((doctors||[]).map(d => [d.id, d.name]));
       // also map specialty under key 'id__spec'
@@ -80,7 +81,6 @@ export async function initProfileController(id) {
         exportToPDF(`Patient ${patient.id} Bills`, html);
       });
 
-      setProfileLoading(false);
       return;
     }
 
@@ -124,11 +124,16 @@ export async function initProfileController(id) {
       ]);
       exportToPDF(`Student ${student.id} Profile`, html);
     });
-
-    setProfileLoading(false);
   } catch (err) {
     console.error("[profileController] error:", err);
     renderProfileError();
+  } finally {
+    // Ensure we always hide loading indicators
+    try {
+      setProfileLoading(false);
+    } catch (e) {
+      console.error('[profileController] error hiding loader', e);
+    }
   }
 }
 
