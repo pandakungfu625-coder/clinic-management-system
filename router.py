@@ -6,28 +6,6 @@ from urllib.parse import urlparse
 
 from controllers.reports import get_enrollment_report
 
-from controllers.students import (
-    get_all_students,
-    get_student,
-    create_student,
-    update_student,
-    delete_student,
-)
-
-from controllers.courses import (
-    get_all_courses,
-    get_course,
-    create_course,
-    update_course,
-    delete_course,
-)
-
-from controllers.enrollments import (
-    get_all_enrollments,
-    get_enrollment,
-    create_enrollment,
-    delete_enrollment,
-)
 
 # Clinic controllers
 from controllers.patients import (
@@ -73,7 +51,6 @@ from core.middleware import add_cors_headers
 
 FRONTEND_ROUTES = {
     "/", "/home",
-    "/students", "/courses", "/enrollments",
     "/reports/enrollments",
     "/docs/flow", "/docs",
     "/profiles",
@@ -154,41 +131,6 @@ class StudentRouter(BaseHTTPRequestHandler):
         if handle_ui_routes(self, path):
             return
 
-        # ---------------------------
-        # STUDENTS
-        # ---------------------------
-        if path == "/api/students":
-            return get_all_students(self)
-
-        if path.startswith("/api/students/"):
-            student_id = _last_path_id_or_404(self, path)
-            if student_id is None:
-                return
-            return get_student(self, student_id)
-
-        # ---------------------------
-        # COURSES
-        # ---------------------------
-        if path == "/api/courses":
-            return get_all_courses(self)
-
-        if path.startswith("/api/courses/"):
-            course_id = _last_path_id_or_404(self, path)
-            if course_id is None:
-                return
-            return get_course(self, course_id)
-
-        # ---------------------------
-        # ENROLLMENTS
-        # ---------------------------
-        if path == "/api/enrollments":
-            return get_all_enrollments(self)
-
-        if path.startswith("/api/enrollments/"):
-            enrollment_id = _last_path_id_or_404(self, path)
-            if enrollment_id is None:
-                return
-            return get_enrollment(self, enrollment_id)
 
         # ---------------------------
         # REPORTS (JOIN)
@@ -265,17 +207,6 @@ class StudentRouter(BaseHTTPRequestHandler):
     def do_POST(self):
         path = urlparse(self.path).path
 
-        # STUDENTS
-        if path == "/api/students":
-            return create_student(self)
-
-        # COURSES
-        if path == "/api/courses":
-            return create_course(self)
-
-        # ENROLLMENTS
-        if path == "/api/enrollments":
-            return create_enrollment(self)
 
         # ---------------------------
         # PATIENTS
@@ -308,20 +239,6 @@ class StudentRouter(BaseHTTPRequestHandler):
     # ---------------------------
     def do_PUT(self):
         path = urlparse(self.path).path
-
-        # STUDENTS
-        if path.startswith("/api/students/"):
-            student_id = _last_path_id_or_404(self, path)
-            if student_id is None:
-                return
-            return update_student(self, student_id)
-
-        # COURSES
-        if path.startswith("/api/courses/"):
-            course_id = _last_path_id_or_404(self, path)
-            if course_id is None:
-                return
-            return update_course(self, course_id)
 
         # ---------------------------
         # PATIENTS
@@ -367,26 +284,6 @@ class StudentRouter(BaseHTTPRequestHandler):
     def do_DELETE(self):
         path = urlparse(self.path).path
 
-        # STUDENTS
-        if path.startswith("/api/students/"):
-            student_id = _last_path_id_or_404(self, path)
-            if student_id is None:
-                return
-            return delete_student(self, student_id)
-
-        # COURSES
-        if path.startswith("/api/courses/"):
-            course_id = _last_path_id_or_404(self, path)
-            if course_id is None:
-                return
-            return delete_course(self, course_id)
-
-        # ENROLLMENTS
-        if path.startswith("/api/enrollments/"):
-            enrollment_id = _last_path_id_or_404(self, path)
-            if enrollment_id is None:
-                return
-            return delete_enrollment(self, enrollment_id)
 
         # ---------------------------
         # PATIENTS

@@ -43,14 +43,14 @@ class TestApiSmoke(unittest.TestCase):
         except Exception:
             cls.proc.kill()
 
-    def test_api_students_returns_200(self):
+    def test_api_patients_returns_200(self):
         """
         This test checks one thing:
-        - When we call /api/students, the server responds correctly
+        - When we call /api/patients, the server responds correctly
         """
 
         # Build the API URL using the test server port
-        url = f"http://127.0.0.1:{self.port}/api/students"
+        url = f"http://127.0.0.1:{self.port}/api/patients"
 
         # Make an HTTP GET request to the API
         with urllib.request.urlopen(url) as resp:
