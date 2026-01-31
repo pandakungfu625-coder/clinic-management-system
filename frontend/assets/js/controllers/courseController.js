@@ -88,7 +88,6 @@ export async function updateCourse(id, data) {
 }
 
 export async function deleteCourseAction(id) {
-  if (!confirm("Delete this course?")) return;
 
   const res = await apiDeleteCourse(id);
   if (res.ok) {

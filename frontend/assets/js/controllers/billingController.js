@@ -85,8 +85,6 @@ export async function updateInvoice(id, data) {
 }
 
 export async function deleteInvoiceAction(id) {
-  if (!confirm("Delete this invoice?")) return;
-
   const res = await apiDelete(id);
   if (res.ok) {
     showAlert("Deleted!");

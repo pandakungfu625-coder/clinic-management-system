@@ -59,7 +59,6 @@ async function loadEnrollmentsOnly() {
 }
 
 export async function deleteEnrollmentAction(id) {
-  if (!confirm("Delete this enrollment?")) return;
 
   const res = await apiDelete(id);
   if (res.ok) {

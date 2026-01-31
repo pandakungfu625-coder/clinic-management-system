@@ -72,8 +72,6 @@ export async function updateAppointment(id, data) {
 }
 
 export async function deleteAppointmentAction(id) {
-  if (!confirm("Delete this appointment?")) return;
-
   const res = await apiDelete(id);
   if (res.ok) {
     showAlert("Deleted!");

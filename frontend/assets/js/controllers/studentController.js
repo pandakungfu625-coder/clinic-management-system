@@ -111,7 +111,6 @@ export async function updateStudent(id, data) {
 
 // Delete a student
 export async function deleteStudentAction(id) {
-  if (!confirm("Delete this student?")) return;
 
   const res = await apiDelete(id);
  	if (res.ok) {

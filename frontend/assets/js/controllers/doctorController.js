@@ -69,8 +69,6 @@ export async function updateDoctor(id, data) {
 }
 
 export async function deleteDoctorAction(id) {
-  if (!confirm("Delete this doctor?")) return;
-
   const res = await apiDelete(id);
   if (res.ok) {
     showAlert("Deleted!");
