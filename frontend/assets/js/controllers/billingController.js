@@ -43,7 +43,7 @@ export async function loadInvoices() {
   // load patients & doctors to show names in the table
   const [patients, doctors] = await Promise.all([apiGetAllPatients(), apiGetAllDoctors()]);
   const pMap = new Map((patients || []).map((p) => [p.id, `${p.first_name} ${p.last_name}`]));
-  const dMap = new Map((doctors || []).map((d) => [d.id, `${d.first_name} ${d.last_name}`]));
+  const dMap = new Map((doctors || []).map((d) => [d.id, d.name || `${d.first_name || ""} ${d.last_name || ""}`.trim()]));
 
   const decorated = (invoices || []).map((inv) => ({
     ...inv,

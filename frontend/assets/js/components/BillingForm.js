@@ -19,7 +19,7 @@ export async function populateSelects() {
   (doctors || []).forEach((d) => {
     const opt = document.createElement("option");
     opt.value = d.id;
-    opt.textContent = `${d.first_name} ${d.last_name}`;
+    opt.textContent = d.name || `${d.first_name || ""} ${d.last_name || ""}`.trim();
     dSelect.appendChild(opt);
   });
 }
