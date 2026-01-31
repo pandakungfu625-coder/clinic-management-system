@@ -250,6 +250,13 @@ class StudentRouter(BaseHTTPRequestHandler):
                 return
             return get_invoice(self, invoice_id)
 
+        # If the path doesn't belong to the API or static assets, serve the SPA
+        # This helps deep-linking like /profiles/123 work even when the server only
+        # sees the direct request (typical in some deployment setups).
+        if not path.startswith("/api/") and not path.startswith("/assets/") and not path.startswith("/frontend/") and path != "/openapi.yaml":
+            serve_static(self, "frontend/pages/index.html")
+            return
+
         return send_404(self)
 
     # ---------------------------
