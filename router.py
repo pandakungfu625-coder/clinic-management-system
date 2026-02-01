@@ -24,12 +24,12 @@ from controllers.doctors import (
     delete_doctor,
 )
 
-from controllers.appointments import (
-    get_all_appointments,
-    get_appointment,
-    create_appointment,
-    update_appointment,
-    delete_appointment,
+from controllers.billing import (
+    get_all_billing,
+    get_billing,
+    create_billing,
+    update_billing,
+    delete_billing,
 )
 
 from controllers.invoices import (
@@ -55,7 +55,7 @@ FRONTEND_ROUTES = {
     "/docs/flow", "/docs",
     "/profiles",
     # Clinic pages
-    "/patients", "/doctors", "/appointments",
+    "/patients", "/doctors", "/billing",
 }
 
 def handle_ui_routes(handler, path):
@@ -114,7 +114,7 @@ def _last_path_id_or_404(handler, path):
 # MAIN ROUTER CLASS
 # -------------------------------
 
-class StudentRouter(BaseHTTPRequestHandler):
+class PatientRouter(BaseHTTPRequestHandler):
 
     def do_OPTIONS(self):
         self.send_response(200)
@@ -139,10 +139,10 @@ class StudentRouter(BaseHTTPRequestHandler):
             return get_enrollment_report(self)
 
         # Clinic reports
-        if path == "/api/reports/appointments":
-            # Lazy import to avoid circular if necessary
-            from database.queries import appointment_report
-            return send_json(self, 200, appointment_report())
+        if path == "/api/reports/billing":
+            # Return all invoices as a basic billing report
+            from services.invoice_service import service_get_all as service_get_all_invoices
+            return send_json(self, 200, service_get_all_invoices())
 
         # ---------------------------
         # PATIENTS
@@ -169,16 +169,16 @@ class StudentRouter(BaseHTTPRequestHandler):
             return get_doctor(self, doctor_id)
 
         # ---------------------------
-        # APPOINTMENTS
+        # BILLING
         # ---------------------------
-        if path == "/api/appointments":
-            return get_all_appointments(self)
+        if path == "/api/billing":
+            return get_all_billing(self)
 
-        if path.startswith("/api/appointments/"):
-            appointment_id = _last_path_id_or_404(self, path)
-            if appointment_id is None:
+        if path.startswith("/api/billing/"):
+            billing_id = _last_path_id_or_404(self, path)
+            if billing_id is None:
                 return
-            return get_appointment(self, appointment_id)
+            return get_billing(self, billing_id)
 
         # ---------------------------
         # INVOICES
@@ -221,10 +221,10 @@ class StudentRouter(BaseHTTPRequestHandler):
             return create_doctor(self)
 
         # ---------------------------
-        # APPOINTMENTS
+        # BILLING
         # ---------------------------
-        if path == "/api/appointments":
-            return create_appointment(self)
+        if path == "/api/billing":
+            return create_billing(self)
 
         # ---------------------------
         # INVOICES
@@ -259,13 +259,13 @@ class StudentRouter(BaseHTTPRequestHandler):
             return update_doctor(self, doctor_id)
 
         # ---------------------------
-        # APPOINTMENTS
+        # BILLING
         # ---------------------------
-        if path.startswith("/api/appointments/"):
-            appointment_id = _last_path_id_or_404(self, path)
-            if appointment_id is None:
+        if path.startswith("/api/billing/"):
+            billing_id = _last_path_id_or_404(self, path)
+            if billing_id is None:
                 return
-            return update_appointment(self, appointment_id)
+            return update_billing(self, billing_id)
 
         # ---------------------------
         # INVOICES
@@ -304,13 +304,13 @@ class StudentRouter(BaseHTTPRequestHandler):
             return delete_doctor(self, doctor_id)
 
         # ---------------------------
-        # APPOINTMENTS
+        # BILLING
         # ---------------------------
-        if path.startswith("/api/appointments/"):
-            appointment_id = _last_path_id_or_404(self, path)
-            if appointment_id is None:
+        if path.startswith("/api/billing/"):
+            billing_id = _last_path_id_or_404(self, path)
+            if billing_id is None:
                 return
-            return delete_appointment(self, appointment_id)
+            return delete_billing(self, billing_id)
 
         # ---------------------------
         # INVOICES

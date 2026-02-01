@@ -1,4 +1,4 @@
-const API_URL = "/api/appointments";
+const API_URL = "/api/billing";
 
 async function safeJson(res) {
   try {

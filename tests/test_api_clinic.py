@@ -46,8 +46,8 @@ class TestApiClinic(unittest.TestCase):
             body = resp.read().decode("utf-8")
             self.assertTrue(len(body) > 0)
 
-    def test_api_appointments_returns_200(self):
-        url = f"http://127.0.0.1:{self.port}/api/appointments"
+    def test_api_billing_returns_200(self):
+        url = f"http://127.0.0.1:{self.port}/api/billing"
         with urllib.request.urlopen(url) as resp:
             self.assertEqual(resp.status, 200)
             body = resp.read().decode("utf-8")

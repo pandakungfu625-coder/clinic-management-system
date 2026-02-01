@@ -1,5 +1,5 @@
 // Environment variables for frontend
 window.ENV = {
-  APP_NAME: "Student Management System",
-  API_BASE_URL: "/api/students"
+  APP_NAME: "Clinic Management System",
+  API_BASE_URL: "/api/patients"
 };
